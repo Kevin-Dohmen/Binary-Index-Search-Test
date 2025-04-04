@@ -17,7 +17,7 @@ function SearchUnique(idx, indexLength, searchValue){ // 21 lines
         }
     }
 
-    return undefined;
+    return 0xFFFFFFFF; // mark as not found
 }
 
 // -=-=-=-=-=- run a few times to let V8's Optimizers do their work -=-=-=-=-=-
@@ -53,13 +53,17 @@ for (let i = 0; i < testIndexesCount; i++){
 // start test
 console.log(`starting test, searching for ${testIndexesCount} indexes in an index of ${rows} rows`)
 
+let dummySum = 0;
+
 const sTime = new Date().getTime();
 
 testIndexes.forEach(testIndex => {
-    _ = SearchUnique(index, rows, testIndex[1]);
+    dummySum += SearchUnique(index, rows, testIndex[1]);
 });
 
 const eTime = new Date().getTime();
+
+console.log(`DummySum: ${dummySum}`);
 
 console.log(`Took ${(eTime - sTime)} ms`)
 console.log(`Average per search: ${(eTime-sTime) / testIndexesCount} ms`)

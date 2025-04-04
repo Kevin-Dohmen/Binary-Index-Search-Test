@@ -21,7 +21,7 @@ int SearchUnique(int **index, int indexLength, int searchValue){ // 21 lines
         }
     }
 
-    throw std::runtime_error("Value not found");
+    return 0xFFFFFFFF; // mark as not found
 }
 
 int main() {
@@ -57,9 +57,12 @@ int main() {
 
     auto sTime = std::chrono::high_resolution_clock::now();
 
+    unsigned int dummySum = 0;
     for (int i = 0; i < testIndexesCount; i++) {
-        SearchUnique(index, rows, testIndexes[i][1]);
+        dummySum += SearchUnique(index, rows, testIndexes[i][1]); // marked as volatile to prevent optimizers from skipping the function
     }
+
+    std::cout << "DummySum: " << dummySum << std::endl;
 
     auto eTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = eTime - sTime;

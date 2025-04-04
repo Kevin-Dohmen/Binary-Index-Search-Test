@@ -18,7 +18,7 @@ def SearchUnique(idx, indexLength, search_value): # 16 lines
         else:
             right = center - 1 # left split
     
-    return None
+    return 0xFFFFFFFF # mark as not found
 
 rows = 5000000 # 5.000.000
 index = [[random.randint(0, 999999), i] for i in range(rows)]
@@ -33,12 +33,16 @@ for i in range(testIndexesCount):
 
 print(f"starting test, searching for {testIndexesCount} indexes in an index of {rows} rows")
 
+dummySum = 0
+
 sTime = timeit.default_timer()
 
 for row in testIndexes:
-    _ = SearchUnique(index, rows, row[1])
+    dummySum += SearchUnique(index, rows, row[1])
 
 eTime = timeit.default_timer()
+
+print(f"DummySum: {dummySum}")
 
 print(f"Took {(eTime - sTime) * 1000:.3f} ms")
 print(f"Average per search: {(eTime - sTime) / testIndexesCount * 1000:.3f} ms")
