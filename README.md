@@ -56,6 +56,7 @@ The Binary search algorithm should be able to find the correct value within 23 (
 |:-------|:---|:---|
 |**Python**|0,008 ms||
 |**JavaScript**|0,00145 ms|With warmup (10.000 iterations on 10.000 indexes)|
-|**C++**|0,0007 ms|With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
+|**C++ (G++)**|0,00065 ms|With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
+|**C++ (mingw-w64)**|0,00013 ms|With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
 
 > side note: im kinda really liking JavaScript (especially TypeScript) for how fast it is, but NOTHING DEFEATS NATIVE C++ in terms of speed.

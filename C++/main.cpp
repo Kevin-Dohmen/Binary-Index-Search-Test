@@ -80,4 +80,8 @@ int main() {
         delete testIndexes[i];
     }
     delete testIndexes;
+
+    std::cout << "Press Enter to exit...";
+    std::cin.get();
+    std::cout << std::endl;
 }
