@@ -62,7 +62,7 @@ public class Program
         DateTime start = DateTime.Now;
         for (int i = 0; i < picedIndexesCount; i++)
         {
-            int ptr = SearchUnique(index, rows, picedIndexes[4][1]);
+            int ptr = SearchUnique(index, rows, picedIndexes[i][1]);
             if (ptr == picedIndexes[i][0])
             {
                 dummySum++;
