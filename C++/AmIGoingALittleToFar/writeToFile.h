@@ -1,8 +1,8 @@
-#include <fstream>
-#include <iostream>
-
 #ifndef WRITEINDEXTOFILE_H
 #define WRITEINDEXTOFILE_H
+
+#include <fstream>
+#include <iostream>
 
 int WriteToFile(int** index, int rows, std::ofstream& outFile, int startPos = 0){
     int byteCount = rows * 8;

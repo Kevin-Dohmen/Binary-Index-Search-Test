@@ -2,8 +2,8 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
-#include "binarySearch.cpp"
-#include "writeToFile.cpp"
+#include "binarySearch.h"
+#include "writeToFile.h"
 
 int main() {
 
@@ -17,9 +17,10 @@ int main() {
     srand(static_cast<unsigned>(time(0)));
 
     for (int i = 0; i < rows; i++) {
-        index[i] = new int[2];
-        index[i][0] = rand() % 1000000 + 1 - 500000;
-        index[i][1] = i + 1;
+        index[i] = new int[2]{
+            rand() % 1000000 + 1 - 500000,
+            i + 1
+        };
     }
 
     // pick 100.000 random indexes to search
@@ -29,9 +30,10 @@ int main() {
 
     for (int i = 0; i < testIndexesCount; i++){
         int randomIndex = rand() % rows;
-        testIndexes[i] = new int[2];
-        testIndexes[i][0] = index[randomIndex][0];
-        testIndexes[i][1] = index[randomIndex][1];
+        testIndexes[i] = new int[2]{
+            index[randomIndex][0],
+            index[randomIndex][1]
+        };
     }
 
     // write indexes to file

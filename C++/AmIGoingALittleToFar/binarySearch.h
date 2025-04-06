@@ -1,7 +1,7 @@
-#include "readFromFile.cpp"
-
 #ifndef BINARYSEARCH_H
 #define BINARYSEARCH_H
+
+#include "readFromFile.h"
 
 int SearchUnique(int searchValue, int indexLength, std::ifstream& index){
     int left = 0;

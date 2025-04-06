@@ -1,8 +1,8 @@
-#include <fstream>
-#include <iostream>
-
 #ifndef READINDEXFROMFILE_H
 #define READINDEXFROMFILE_H
+
+#include <fstream>
+#include <iostream>
 
 int* ReadSingleIndexFromFile(int row, std::ifstream& inFile){
     int byteLoc = row * 8;
@@ -18,13 +18,17 @@ int* ReadSingleIndexFromFile(int row, std::ifstream& inFile){
     for (int i = 0; i < 4; i++){
         ptr = (ptr << 8) | static_cast<unsigned char>(barr[i]);
         val = (val << 8) | static_cast<unsigned char>(barr[i + 4]);
+
+        // ptr = (ptr << 8) | (barr[i] & 0xFF);     // same same... but different
+        // val = (val << 8) | (barr[i + 4] & 0xFF);
     }
 
     delete[] barr;
 
-    int* idx = new int[2];
-    idx[0] = ptr;
-    idx[1] = val;
+    int* idx = new int[2]{
+        ptr,
+        val
+    };
 
     return idx;
 }
