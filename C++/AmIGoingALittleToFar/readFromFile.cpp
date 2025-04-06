@@ -22,9 +22,9 @@ int* ReadSingleIndexFromFile(int row, std::ifstream& inFile){
 
     delete[] barr;
 
-    int* idx = new int[2]{
-        ptr, val
-    };
+    int* idx = new int[2];
+    idx[0] = ptr;
+    idx[1] = val;
 
     return idx;
 }

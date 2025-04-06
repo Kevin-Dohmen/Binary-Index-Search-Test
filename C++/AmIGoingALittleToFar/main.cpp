@@ -9,11 +9,10 @@ int main() {
 
     std::cout << "start" << std::endl;
 
-    const int rows = 5000000; // 5.000.000
+    int rows = 5000000; // 5.000.000
 
     // init and fill index array
-    int **index;
-    index = new int*[rows];
+    int** index = new int*[rows];
 
     srand(static_cast<unsigned>(time(0)));
 
@@ -25,12 +24,12 @@ int main() {
 
     // pick 100.000 random indexes to search
     int testIndexesCount = 1000; // 1000
-    int **testIndexes;
+    int** testIndexes;
     testIndexes = new int*[testIndexesCount];
 
     for (int i = 0; i < testIndexesCount; i++){
-        testIndexes[i] = new int[2];
         int randomIndex = rand() % rows;
+        testIndexes[i] = new int[2];
         testIndexes[i][0] = index[randomIndex][0];
         testIndexes[i][1] = index[randomIndex][1];
     }
@@ -44,9 +43,9 @@ int main() {
 
     // cleanup
     for (int i = 0; i < rows; i++){
-        delete index[i];
+        delete[] index[i];
     }
-    delete index;
+    delete[] index;
 
     // start test
 
@@ -58,7 +57,7 @@ int main() {
     std::streampos fileSize = inFile.tellg();
     inFile.seekg(0, std::ios::beg);
 
-    std::cout << "file size: " << fileSize << " bytes";
+    std::cout << "file size: " << fileSize << " bytes" << std::endl;
 
     auto sTime = std::chrono::high_resolution_clock::now();
 
@@ -83,7 +82,7 @@ int main() {
 
     // cleanup
     for (int i = 0; i < testIndexesCount; i++){
-        delete testIndexes[i];
+        delete[] testIndexes[i];
     }
-    delete testIndexes;
+    delete[] testIndexes;
 }

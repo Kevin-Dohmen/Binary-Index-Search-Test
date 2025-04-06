@@ -3,8 +3,6 @@
 #ifndef BINARYSEARCH_H
 #define BINARYSEARCH_H
 
-const int MaxFullFetchSize = 100000;
-
 int SearchUnique(int searchValue, int indexLength, std::ifstream& index){
     int left = 0;
     int right = indexLength - 1;
@@ -24,8 +22,8 @@ int SearchUnique(int searchValue, int indexLength, std::ifstream& index){
         int value = idx[1];
 
         if (value == searchValue){
-            delete[] idx;
             return idx[0];
+            delete[] idx;
         }
         else if (value < searchValue){
             left = center + 1; // right split
