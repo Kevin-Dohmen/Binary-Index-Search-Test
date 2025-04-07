@@ -4,6 +4,8 @@
 #include <vector>
 #include "binarySearch.h"
 #include "writeToFile.h"
+#include <filesystem>
+#include <random>
 
 int main() {
 
@@ -14,17 +16,18 @@ int main() {
     // init and fill index array
     int** index = new int*[rows];
 
-    srand(static_cast<unsigned>(time(0)));
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist(-500000, 500000);
 
     for (int i = 0; i < rows; i++) {
         index[i] = new int[2]{
-            rand() % 1000000 + 1 - 500000,
+            dist(rng),
             i + 1
         };
     }
 
     // pick 100.000 random indexes to search
-    int testIndexesCount = 1000; // 1000
+    int testIndexesCount = 100000; // 100.000
     int** testIndexes;
     testIndexes = new int*[testIndexesCount];
 
@@ -36,8 +39,14 @@ int main() {
         };
     }
 
+    std::filesystem::create_directories("./tmp");
+
     // write indexes to file
-    std::ofstream outFile("./out/index", std::ios::binary);
+    std::ofstream outFile("./tmp/index", std::ios::binary);
+    if (!outFile) {
+        std::cerr << "Failed to open output file!" << std::endl;
+        return 1;
+    }
 
     WriteToFile(index, rows, outFile);
 
@@ -54,7 +63,11 @@ int main() {
 
     std::cout << "starting test, searching for " << testIndexesCount << " indexes in an index of " << rows << " rows" << std::endl;
 
-    std::ifstream inFile("./out/index", std::ios::binary);
+    std::ifstream inFile("./tmp/index", std::ios::binary);
+    if (!inFile) {
+        std::cerr << "Failed to open input file!" << std::endl;
+        return 1;
+    }
 
     inFile.seekg(0, std::ios::end);
     std::streampos fileSize = inFile.tellg();
@@ -67,7 +80,7 @@ int main() {
     int correctSearches = 0;
     for (int i = 0; i < testIndexesCount; i++) {
         volatile int ptr = SearchUnique(testIndexes[i][1], rows, inFile); // marked volatile to prevent optimizations
-        if (ptr != 0xFFFFFFFF && ptr == testIndexes[i][0]){
+        if (ptr != (int)0xFFFFFFFF && ptr == testIndexes[i][0]){
             correctSearches++;
         }
     }

@@ -1,34 +1,9 @@
-#ifndef BINARYSEARCH_H
-#define BINARYSEARCH_H
+#ifndef BINARY_SEARCH_H
+#define BINARY_SEARCH_H
 
+#include <fstream>
 #include "readFromFile.h"
 
-int SearchUnique(int searchValue, int indexLength, std::ifstream& index){
-    int left = 0;
-    int right = indexLength - 1;
-
-    while (left <= right){
-        int center = (left + right) / 2;
-
-        int* idx = ReadSingleIndexFromFile(center, index);
-        int value = idx[1];
-
-        if (value == searchValue){
-            int ptr = idx[0];
-            delete[] idx;
-            return ptr;
-        }
-        else if (value < searchValue){
-            left = center + 1; // right split
-        }
-        else {
-            right = center - 1; // left split
-        }
-
-        delete[] idx;
-    }
-
-    return 0xFFFFFFFF; // mark as not found
-}
+int SearchUnique(int searchValue, int indexLength, std::ifstream& index);
 
 #endif
