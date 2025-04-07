@@ -48,6 +48,7 @@ int main() {
         delete[] index[i];
     }
     delete[] index;
+    index = nullptr;
 
     // start test
 
@@ -65,7 +66,7 @@ int main() {
 
     int correctSearches = 0;
     for (int i = 0; i < testIndexesCount; i++) {
-        int ptr = SearchUnique(testIndexes[i][1], rows, inFile);
+        volatile int ptr = SearchUnique(testIndexes[i][1], rows, inFile); // marked volatile to prevent optimizations
         if (ptr != 0xFFFFFFFF && ptr == testIndexes[i][0]){
             correctSearches++;
         }
@@ -87,4 +88,5 @@ int main() {
         delete[] testIndexes[i];
     }
     delete[] testIndexes;
+    testIndexes = nullptr;
 }
