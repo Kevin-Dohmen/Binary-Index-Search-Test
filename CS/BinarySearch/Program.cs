@@ -31,7 +31,7 @@ public class Program
         return int.MaxValue;
     }
 
-    public static void Main(string[] args)
+    public static void test()
     {
         int rows = 5_000_000; // 5.000.000
         int[][] index = new int[rows][];
@@ -73,5 +73,14 @@ public class Program
         Console.WriteLine($"DummySum: {dummySum}");
         Console.WriteLine($"Took: {(end - start).TotalMilliseconds} ms");
         Console.WriteLine($"Average per search: {(end - start).TotalMilliseconds / picedIndexesCount}");
+    }
+
+    public static void Main(string[] args)
+    {
+        while (true)
+        {
+            Console.ReadLine();
+            test();
+        }
     }
 }
