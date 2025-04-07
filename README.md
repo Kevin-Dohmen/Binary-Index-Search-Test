@@ -54,12 +54,12 @@ The Binary search algorithm should be able to find the correct value within 23 (
 
 |language|time|note|
 |:-------|:---|:---|
-|**Python**|0,008 ms||
+|**Python**|0,008 ms|No warmup|
 |**JavaScript**|0,00145 ms|With warmup (10.000 iterations on 10.000 indexes)|
 |**C++**|0,00065 ms|(G++) With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
 |**C++**|0,00013 ms|(mingw-w64) With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
 |**C++**|3,458 ms|(index in file) (G++) With compile-time optimizers: `-O2 -frename-registers` (in Ubuntu)|
-|**C#**|0,000408 ms|(.NET Debug) Without warm-up, so actual value will be lower|
-|**C#**|0,000541 ms|(.NET Release) Without warm-up, so actual value will be lower (why higher than Debug??)|
+|**C#**|0,000408 ms|(.NET Debug) Without warmup, so actual value will be lower|
+|**C#**|0,000541 ms|(.NET Release) Without warmup, so actual value will be lower (why higher than Debug??)|
 
 > side note: im kinda really liking JavaScript (especially TypeScript) for how fast it is, but NOTHING DEFEATS NATIVE C++ in terms of speed.
