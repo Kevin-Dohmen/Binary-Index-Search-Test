@@ -1,33 +1,35 @@
-#include <ostream>
 #include <iostream>
 #include <chrono>
-#include <vector>
 #include "binarySearch.h"
 #include "writeToFile.h"
 #include <filesystem>
-#include <random>
 
 int main() {
-
     std::cout << "start" << std::endl;
 
     int rows = 5000000; // 5.000.000
 
+    std::cout << "Generating " << rows << " random indexes..." << std::endl;
+
     // init and fill index array
     int** index = new int*[rows];
 
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<int> dist(-500000, 500000);
+    srand(static_cast<unsigned>(time(0)));
 
     for (int i = 0; i < rows; i++) {
         index[i] = new int[2]{
-            dist(rng),
+            rand() % 10000000 - 5000000,
             i + 1
         };
     }
 
+    std::cout << "Generated indexes!" << std::endl;
+
     // pick 100.000 random indexes to search
     int testIndexesCount = 100000; // 100.000
+
+    std::cout << "\nPicking " << testIndexesCount << " random indexes from original dataset for test..." << std::endl;
+
     int** testIndexes;
     testIndexes = new int*[testIndexesCount];
 
@@ -38,6 +40,10 @@ int main() {
             index[randomIndex][1]
         };
     }
+
+    std::cout << "Picked indexes!" << std::endl;
+
+    std::cout << "\nSaving to file..." << std::endl;
 
     std::filesystem::create_directories("./tmp");
 
@@ -52,6 +58,8 @@ int main() {
 
     outFile.close();
 
+    std::cout << "Saved indexes to file!" << std::endl;
+
     // cleanup
     for (int i = 0; i < rows; i++){
         delete[] index[i];
@@ -61,7 +69,7 @@ int main() {
 
     // start test
 
-    std::cout << "starting test, searching for " << testIndexesCount << " indexes in an index of " << rows << " rows" << std::endl;
+    std::cout << "\nstarting test, searching for " << testIndexesCount << " indexes in an index of " << rows << " rows" << std::endl;
 
     std::ifstream inFile("./tmp/index", std::ios::binary);
     if (!inFile) {
