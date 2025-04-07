@@ -1,5 +1,10 @@
-OUT_DIR := ./out
+# Output directory
+OUT_DIR := ./build
 $(shell mkdir -p $(OUT_DIR))
+
+# Other directories
+SRC_DIR := ./src
+INC_DIR := ./include
 
 # compilers:
 # g++					 : GNU C++ compiler
@@ -13,28 +18,36 @@ CXXFLAGS := \
 	-O2 -frename-registers -flto -funroll-loops \
 	-std=c++17 \
 	-static-libgcc -static-libstdc++
+
+# Target executable
 TARGET := $(OUT_DIR)/main.exe
 
-# source files
-SRCS := \
-	main.cpp \
-	binarySearch.cpp \
-	readFromFile.cpp \
-	writeToFile.cpp
+# Source and header files
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+HEADERS := $(wildcard $(INC_DIR)/*.h)
 
+# Object files
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
 
-OBJS := $(SRCS:%.cpp=$(OUT_DIR)/%.o)
-
+# Default target
 all: $(TARGET)
 
+# Link object files to create the target executable
 $(TARGET): $(OBJS)
+	@echo "Linking: $@"
 	$(CXX) $(CXXFLAGS) -o $@ $^
+	@echo "Linked: $@"
 
-$(OUT_DIR)/%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Compile source files into object files
+$(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
+	@echo "Compiling: $<"
+	$(CXX) $(CXXFLAGS) -Iinclude -c $< -o $@
+	@echo "Compiled: $< -> $@"
 
 # Clean up build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	@echo "Cleaning up..."
+	rm -rf $(OUT_DIR)
 
+# Phony targets
 .PHONY: all clean
