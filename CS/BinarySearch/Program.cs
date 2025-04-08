@@ -42,7 +42,7 @@ public class Program
         {
             index[i] = new int[2];
             index[i][0] = random.Next(0, 999999);
-            index[i][1] = i * 2;
+            index[i][1] = i + 1;
         }
 
         int picedIndexesCount = 100_000; // 100.000
