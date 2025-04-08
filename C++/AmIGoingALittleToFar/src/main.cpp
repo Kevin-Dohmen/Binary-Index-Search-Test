@@ -110,4 +110,8 @@ int main() {
     }
     delete[] testIndexes;
     testIndexes = nullptr;
+
+    std::cout << "\nPress enter to exit...";
+    std::cin.get();
+    std::cout << std::endl;
 }
