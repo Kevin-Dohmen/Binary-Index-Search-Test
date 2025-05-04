@@ -1,0 +1,19 @@
+{
+  "name": "indexsearch",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Kevin Dohmen",
+  "type": "commonjs",
+  "main": "./build/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && terser ./build/*.js --compress --mangle --output ./build/main.js",
+    "start": "node build/main.js",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "terser": "^5.39.0",
+    "typescript": "^5.8.3"
+  }
+}
