@@ -1,4 +1,8 @@
-out/
 tmp/
 
+build/
+**/MSBuild/**/x64/
+out/
+
 .vscode/
+.vs/

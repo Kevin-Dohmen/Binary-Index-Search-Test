@@ -1,101 +1,76 @@
 #include <iostream>
 #include <chrono>
-#include "binarySearch.h"
-#include "writeToFile.h"
 #include <filesystem>
+#include <vector>
+#include "search.hpp"
+#include "sort.hpp"
+// #include "writeToFile.h"
+#include "index.hpp"
 
 int main() {
     std::cout << "start" << std::endl;
 
-    int rows = 5000000; // 5.000.000
+    size_t rows = 5000000; // 5.000.000
 
-    std::cout << "Generating " << rows << " random indexes..." << std::endl;
+    std::cout << "Generating " << rows << " random indexes.";
 
     // init and fill index array
-    int** index = new int*[rows];
+    std::vector<IndexValue<uint32_t, int32_t>> index(rows);
 
     srand(static_cast<unsigned>(time(0)));
 
-    for (int i = 0; i < rows; i++) {
-        index[i] = new int[2]{
-            rand() % 10000000 - 5000000,
-            i + 1
-        };
+    std::cout << ".";
+
+    for (size_t i = 0; i < rows; i++) {
+        index[i] = IndexValue<uint32_t, int32_t>(
+            (uint32_t)i + 1,
+            rand() % 10000000 - 5000000
+        );
     }
+
+    std::cout << "." << std::endl;
+
+    std::cout << "Sorting indexes..." << std::endl;
+
+    auto sortSTime = std::chrono::high_resolution_clock::now();
+    sort::MergeSortInPlace(index);
+    auto sortETime = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> sortElapsed = sortETime - sortSTime;
+
+    std::cout << "Sort time: " << sortElapsed.count() * 1000 << " ms sorted: " << sort::CheckSorted(index) << std::endl;
 
     std::cout << "Generated indexes!" << std::endl;
 
     // pick 100.000 random indexes to search
-    int testIndexesCount = 100000; // 100.000
+    size_t testIndexesCount = 100000; // 100.000
 
     std::cout << "\nPicking " << testIndexesCount << " random indexes from original dataset for test..." << std::endl;
 
-    int** testIndexes;
-    testIndexes = new int*[testIndexesCount];
+    std::vector<IndexValue<uint32_t, int32_t>> testIndexes(testIndexesCount);
 
-    for (int i = 0; i < testIndexesCount; i++){
-        int randomIndex = rand() % rows;
-        testIndexes[i] = new int[2]{
-            index[randomIndex][0],
-            index[randomIndex][1]
-        };
+    for (size_t i = 0; i < testIndexesCount; i++){
+        size_t randomIndex = rand() % rows;
+        testIndexes[i] = index[randomIndex];
     }
 
     std::cout << "Picked indexes!" << std::endl;
 
-    std::cout << "\nSaving to file..." << std::endl;
-
-    std::filesystem::create_directories("./tmp");
-
-    // write indexes to file
-    std::ofstream outFile("./tmp/index", std::ios::binary);
-    if (!outFile) {
-        std::cerr << "Failed to open output file!" << std::endl;
-        return 1;
-    }
-
-    WriteToFile(index, rows, outFile);
-
-    outFile.close();
-
-    std::cout << "Saved indexes to file!" << std::endl;
-
-    // cleanup
-    for (int i = 0; i < rows; i++){
-        delete[] index[i];
-    }
-    delete[] index;
-    index = nullptr;
-
-    // start test
-
-    std::cout << "\nstarting test, searching for " << testIndexesCount << " indexes in an index of " << rows << " rows" << std::endl;
-
-    std::ifstream inFile("./tmp/index", std::ios::binary);
-    if (!inFile) {
-        std::cerr << "Failed to open input file!" << std::endl;
-        return 1;
-    }
-
-    inFile.seekg(0, std::ios::end);
-    std::streampos fileSize = inFile.tellg();
-    inFile.seekg(0, std::ios::beg);
-
-    std::cout << "file size: " << fileSize << " bytes" << std::endl;
+    std::cout << "\nStarting test, searching for " << testIndexesCount << " indexes in an index of " << rows << " rows" << std::endl;
 
     auto sTime = std::chrono::high_resolution_clock::now();
 
     int correctSearches = 0;
     for (int i = 0; i < testIndexesCount; i++) {
-        volatile int ptr = SearchUnique(testIndexes[i][1], rows, inFile); // marked volatile to prevent optimizations
-        if (ptr != (int)0xFFFFFFFF && ptr == testIndexes[i][0]){
+        volatile IndexValue<uint32_t, int32_t>* found = search::BinarySearchUnique(index, testIndexes[i].Value); // marked volatile to prevent optimizations
+        if (found != nullptr && found->Pointer == testIndexes[i].Pointer){
             correctSearches++;
         }
     }
 
     auto eTime = std::chrono::high_resolution_clock::now();
 
-    inFile.close();
+    // inFile.close();
 
     std::cout << "Correct: " << correctSearches << std::endl;
 
@@ -104,12 +79,12 @@ int main() {
     std::cout << "Time taken: " << elapsed.count() * 1000 << " ms" << std::endl;
     std::cout << "Average per search: " << elapsed.count() * 1000 / testIndexesCount << " ms" << std::endl;
 
-    // cleanup
-    for (int i = 0; i < testIndexesCount; i++){
-        delete[] testIndexes[i];
-    }
-    delete[] testIndexes;
-    testIndexes = nullptr;
+    // // cleanup
+    // for (int i = 0; i < testIndexesCount; i++){
+    //     delete[] testIndexes[i];
+    // }
+    // delete[] testIndexes;
+    // testIndexes = nullptr;
 
     std::cout << "\nPress enter to exit...";
     std::cin.get();
