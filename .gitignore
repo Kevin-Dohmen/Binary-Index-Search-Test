@@ -6,3 +6,6 @@ out/
 
 .vscode/
 .vs/
+
+Python/**/frames
+*.pyc

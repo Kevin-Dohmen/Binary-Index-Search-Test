@@ -62,8 +62,8 @@ int main() {
 
     int correctSearches = 0;
     for (int i = 0; i < testIndexesCount; i++) {
-        volatile IndexValue<uint32_t, int32_t>* found = search::BinarySearchUnique(index, testIndexes[i].Value); // marked volatile to prevent optimizations
-        if (found != nullptr && found->Pointer == testIndexes[i].Pointer){
+        volatile IndexValue<uint32_t, int32_t>* found = search::InterpolationSearchUnique(index, testIndexes[i].Value); // marked volatile to prevent optimizations
+        if (found != nullptr && found->Value == testIndexes[i].Value){
             correctSearches++;
         }
     }
